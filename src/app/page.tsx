@@ -1,27 +1,27 @@
-import { LoginForm } from "@/components/login-form";
+import { MonkeyForm } from "@/components/monkey-form";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
-      <div className="flex w-full max-w-sm flex-col gap-6 md:max-w-3xl">
+    <div className="flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
+      <div className="flex w-full max-w-sm flex-col gap-4 sm:gap-6 md:max-w-3xl">
         <Link
           href="#"
-          className="flex items-center gap-2 self-center font-medium"
+          className="flex items-baseline gap-2 self-center font-medium"
         >
-          <div className="flex h-8 w-8 items-center justify-center">
+          <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center">
             <Image
               src="/monkeypay_logo.svg"
               alt="MonkeyPay Logo"
-              className="h-8 w-8"
-              width={32}
-              height={32}
+              className="h-10 w-10 sm:h-12 sm:w-12"
+              width={48}
+              height={48}
             />
           </div>
-          MonkeyPay
+          <span className="text-xl sm:text-2xl font-bold">MonkeyPay</span>
         </Link>
-        <LoginForm />
+        <MonkeyForm />
       </div>
     </div>
   );
