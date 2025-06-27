@@ -8,7 +8,7 @@ import { ValidationError } from "@/lib/swissqrbill/errors";
 import { renderQRCode, renderSwissCross } from "@/lib/swissqrbill/qr-code";
 import type { Data } from "@/lib/swissqrbill/types";
 import { cn } from "@/lib/utils";
-import { QrCode } from "lucide-react";
+import { ChevronDown, QrCode } from "lucide-react";
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -157,14 +157,22 @@ export function MonkeyForm({
 
               {/* Mobile QR Preview */}
               <div className="flex justify-center md:hidden">
-                <div className="bg-muted h-42 w-42 p-4 rounded-lg shadow-inner flex items-center justify-center">
+                <div className="bg-muted h-52 w-52 p-4 rounded-lg shadow-inner flex flex-col items-center justify-center gap-2">
                   {qrCodeSvg ? (
                     <div
                       dangerouslySetInnerHTML={{ __html: qrCodeSvg }}
-                      className="h-32 w-32"
+                      className="h-40 w-40"
                     />
                   ) : (
-                    <QrCode className="h-32 w-32 text-muted-foreground" />
+                    <>
+                      <QrCode className="h-28 w-28 text-muted-foreground" />
+                      <div className="flex flex-col items-center gap-1">
+                        <p className="text-xs text-muted-foreground text-center">
+                          Get started below
+                        </p>
+                        <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                      </div>
+                    </>
                   )}
                 </div>
               </div>
@@ -262,7 +270,7 @@ export function MonkeyForm({
                     type="number"
                     step="0.01"
                     placeholder="100.00"
-                    className="block min-w-0 grow bg-transparent pl-2 text-sm placeholder:text-muted-foreground focus:outline-none"
+                    className="block min-w-0 grow bg-transparent pl-2 text-base sm:text-sm placeholder:text-muted-foreground focus:outline-none"
                     value={formState.amount}
                     onChange={handleInputChange}
                   />
@@ -288,14 +296,21 @@ export function MonkeyForm({
           {/* Desktop QR Preview */}
           <div className="relative hidden bg-muted md:block -my-6 -mr-6 ml-6">
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-white h-60 w-60 p-8 rounded-lg shadow-lg flex items-center justify-center">
+              <div className="bg-white h-60 w-60 p-8 rounded-lg shadow-lg flex flex-col items-center justify-center gap-3">
                 {qrCodeSvg ? (
                   <div
                     dangerouslySetInnerHTML={{ __html: qrCodeSvg }}
                     className="h-full w-full"
                   />
                 ) : (
-                  <QrCode className="h-24 w-24 text-gray-400" />
+                  <>
+                    <QrCode className="h-28 w-28 text-gray-400" />
+                    <div className="flex items-center gap-1">
+                      <p className="text-sm text-gray-500 text-center max-w-34">
+                        Get started by filling out the form
+                      </p>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
