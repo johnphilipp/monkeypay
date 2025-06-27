@@ -8,7 +8,7 @@ import { ValidationError } from "@/lib/swissqrbill/errors";
 import { renderQRCode, renderSwissCross } from "@/lib/swissqrbill/qr-code";
 import type { Data } from "@/lib/swissqrbill/types";
 import { cn } from "@/lib/utils";
-import { ChevronDown, QrCode } from "lucide-react";
+import { ChevronDown, QrCode, Share2 } from "lucide-react";
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -34,6 +34,7 @@ export function MonkeyForm({
   ...props
 }: React.ComponentProps<"div">) {
   const [qrCodeSvg, setQrCodeSvg] = useState<string | null>(null);
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [formState, setFormState] = useState({
     fullname: "",
@@ -81,6 +82,14 @@ export function MonkeyForm({
         if (isData(savedData)) {
           const svg = generateQrCodeSvg(savedData);
           setQrCodeSvg(svg);
+          const dataString = JSON.stringify(savedData);
+          const encodedData = btoa(dataString)
+            .replace(/\+/g, "-")
+            .replace(/\//g, "_")
+            .replace(/=/g, "");
+          setShareUrl(
+            new URL(`/qr/${encodedData}`, window.location.origin).toString()
+          );
           setFormState({
             fullname: savedData.creditor.name,
             street: savedData.creditor.address,
@@ -104,6 +113,7 @@ export function MonkeyForm({
     event.preventDefault();
     setError(null);
     setQrCodeSvg(null);
+    setShareUrl(null);
 
     const { fullname, street, zipcode, city, iban, amount } = formState;
 
@@ -126,6 +136,16 @@ export function MonkeyForm({
     try {
       const svg = generateQrCodeSvg(data);
       setQrCodeSvg(svg);
+      const dataString = JSON.stringify(data);
+      const encodedData = btoa(dataString)
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=/g, "");
+      const newShareUrl = new URL(
+        `/qr/${encodedData}`,
+        window.location.origin
+      ).toString();
+      setShareUrl(newShareUrl);
       localStorage.setItem("monkeypay_form_data", JSON.stringify(data));
       toast.success("QR code generated successfully!");
     } catch (e) {
@@ -138,6 +158,27 @@ export function MonkeyForm({
     }
 
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleShare = async () => {
+    if (navigator.share && shareUrl) {
+      try {
+        await navigator.share({
+          title: "MonkeyPay QR Bill\n",
+          text: "\nHere is my Swiss QR Bill for payment.",
+          url: shareUrl,
+        });
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") {
+          // User cancelled share, do nothing.
+        } else {
+          toast.error("Could not share the QR code.");
+        }
+      }
+    } else if (shareUrl) {
+      void navigator.clipboard.writeText(shareUrl);
+      toast.success("Share link copied to clipboard!");
+    }
   };
 
   return (
@@ -156,7 +197,7 @@ export function MonkeyForm({
               </div>
 
               {/* Mobile QR Preview */}
-              <div className="flex justify-center md:hidden">
+              <div className="flex flex-col items-center gap-4 md:hidden">
                 <div className="bg-muted h-52 w-52 p-4 rounded-lg shadow-inner flex flex-col items-center justify-center gap-2">
                   {qrCodeSvg ? (
                     <div
@@ -175,6 +216,16 @@ export function MonkeyForm({
                     </>
                   )}
                 </div>
+                {qrCodeSvg && shareUrl && (
+                  <Button
+                    onClick={() => void handleShare()}
+                    variant="outline"
+                    className="w-52"
+                  >
+                    <Share2 className="mr-2 h-4 w-4" />
+                    Share QR Code
+                  </Button>
+                )}
               </div>
 
               {error && (
@@ -296,21 +347,29 @@ export function MonkeyForm({
           {/* Desktop QR Preview */}
           <div className="relative hidden bg-muted md:block -my-6 -mr-6 ml-6">
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-white h-60 w-60 p-8 rounded-lg shadow-lg flex flex-col items-center justify-center gap-3">
-                {qrCodeSvg ? (
-                  <div
-                    dangerouslySetInnerHTML={{ __html: qrCodeSvg }}
-                    className="h-full w-full"
-                  />
-                ) : (
-                  <>
-                    <QrCode className="h-28 w-28 text-gray-400" />
-                    <div className="flex items-center gap-1">
-                      <p className="text-sm text-gray-500 text-center max-w-34">
-                        Get started by filling out the form
-                      </p>
-                    </div>
-                  </>
+              <div className="flex flex-col items-center gap-4">
+                <div className="bg-white h-60 w-60 p-8 rounded-lg shadow-lg flex flex-col items-center justify-center gap-3">
+                  {qrCodeSvg ? (
+                    <div
+                      dangerouslySetInnerHTML={{ __html: qrCodeSvg }}
+                      className="h-full w-full"
+                    />
+                  ) : (
+                    <>
+                      <QrCode className="h-28 w-28 text-gray-400" />
+                      <div className="flex items-center gap-1">
+                        <p className="text-sm text-gray-500 text-center max-w-34">
+                          Get started by filling out the form
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+                {qrCodeSvg && shareUrl && (
+                  <Button onClick={() => void handleShare()} variant="outline">
+                    <Share2 className="mr-2 h-4 w-4" />
+                    Share QR Code
+                  </Button>
                 )}
               </div>
             </div>
