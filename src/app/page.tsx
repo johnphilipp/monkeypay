@@ -13,7 +13,7 @@ export default function HomePage() {
           <ShieldCheck className="h-5 w-5 text-muted-foreground flex-shrink-0" />
           <span className="text-sm sm:text-base text-muted-foreground flex flex-col md:block items-center md:items-start">
             Your data always stays on your device.{" "}
-            <Link href="/learn-more" className="underline hover:cursor-pointer">
+            <Link href="/about" className="underline hover:cursor-pointer">
               Learn more
             </Link>
           </span>
