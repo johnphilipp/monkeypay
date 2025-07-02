@@ -29,10 +29,7 @@ function isData(obj: unknown): obj is Data {
   );
 }
 
-export function MonkeyForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export function QRForm({ className, ...props }: React.ComponentProps<"div">) {
   const [qrCodeSvg, setQrCodeSvg] = useState<string | null>(null);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -198,11 +195,11 @@ export function MonkeyForm({
 
               {/* Mobile QR Preview */}
               <div className="flex flex-col items-center gap-4 md:hidden">
-                <div className="bg-muted h-52 w-52 p-4 rounded-lg shadow-inner flex flex-col items-center justify-center gap-2">
+                <div className="border bg-muted/50 h-52 w-52 p-4 rounded-lg shadow-inner flex flex-col items-center justify-center gap-2">
                   {qrCodeSvg ? (
                     <div
                       dangerouslySetInnerHTML={{ __html: qrCodeSvg }}
-                      className="h-40 w-40"
+                      className="h-44 w-44"
                     />
                   ) : (
                     <>
@@ -222,7 +219,7 @@ export function MonkeyForm({
                     variant="outline"
                     className="w-52"
                   >
-                    <Share2 className="mr-2 h-4 w-4" />
+                    <Share2 />
                     Share QR Code
                   </Button>
                 )}
@@ -345,14 +342,14 @@ export function MonkeyForm({
           </form>
 
           {/* Desktop QR Preview */}
-          <div className="relative hidden bg-muted md:block -my-6 -mr-6 ml-6">
+          <div className="border-l relative hidden bg-muted/50 md:block -my-6 -mr-6 ml-6">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="flex flex-col items-center gap-4">
-                <div className="bg-white h-60 w-60 p-8 rounded-lg shadow-lg flex flex-col items-center justify-center gap-3">
+                <div className="border bg-white h-60 w-60 p-8 rounded-lg shadow-inner flex flex-col items-center justify-center gap-3">
                   {qrCodeSvg ? (
                     <div
                       dangerouslySetInnerHTML={{ __html: qrCodeSvg }}
-                      className="h-full w-full"
+                      className="h-50 w-50"
                     />
                   ) : (
                     <>

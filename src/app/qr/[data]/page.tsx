@@ -1,7 +1,9 @@
+import { Header } from "@/components/header";
+import { Button } from "@/components/ui/button";
 import { renderQRCode, renderSwissCross } from "@/lib/swissqrbill/qr-code";
 import type { Data } from "@/lib/swissqrbill/types";
+import { QrCode } from "lucide-react";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -115,33 +117,19 @@ export default async function QrPage({ params }: PageProps) {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-4 sm:gap-6 md:max-w-3xl">
-        <Link
-          href="/"
-          className="flex items-baseline gap-2 self-center font-medium"
-        >
-          <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center">
-            <Image
-              src="/monkeypay_logo.svg"
-              alt="MonkeyPay Logo"
-              className="h-10 w-10 sm:h-12 sm:w-12"
-              width={48}
-              height={48}
-            />
-          </div>
-          <span className="text-xl sm:text-2xl font-bold">MonkeyPay</span>
-        </Link>
+        <Header />
 
         <div className="flex flex-col items-center gap-6 rounded-2xl border bg-background p-8 shadow-xl">
           <div className="flex flex-col items-center text-center gap-1 sm:gap-2">
-            <h1 className="text-xl sm:text-2xl font-bold">Swiss QR Bill</h1>
+            <h1 className="text-xl sm:text-2xl font-bold">Swiss QR-Bill</h1>
             <p className="text-balance text-muted-foreground text-sm sm:text-base">
               Scan the code below with your banking app to pay.
             </p>
           </div>
-          <div className="bg-muted h-52 w-52 p-4 rounded-lg shadow-inner flex flex-col items-center justify-center">
+          <div className="border bg-muted/50 h-52 w-52 p-4 rounded-lg shadow-inner flex flex-col items-center justify-center">
             <div
               dangerouslySetInnerHTML={{ __html: qrCodeSvg }}
-              className="h-40 w-40"
+              className="h-44 w-44"
             />
           </div>
           <div className="w-full text-sm">
@@ -170,22 +158,15 @@ export default async function QrPage({ params }: PageProps) {
               </span>
             </div>
           </div>
+          <Button asChild className="w-full">
+            <Link href="/">
+              <QrCode />
+              Create your own
+            </Link>
+          </Button>
         </div>
 
-        <div className="text-center text-sm text-muted-foreground">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 rounded-full border bg-background px-4 py-2 transition-colors hover:bg-muted/50"
-          >
-            <Image
-              src="/monkeypay_logo.svg"
-              alt="MonkeyPay Logo"
-              width={20}
-              height={20}
-            />
-            <span>Create your own QR bill with MonkeyPay</span>
-          </Link>
-        </div>
+        <div className="text-center text-sm text-muted-foreground"></div>
       </div>
     </div>
   );
