@@ -19,6 +19,11 @@ const TEAM = [
     linkedin: "https://www.linkedin.com/in/philipp-john/",
     image: "/philipp.jpeg",
   },
+  {
+      name: "Bryan",
+      linkedin: "https://www.linkedin.com/btr-dev",
+      image: "/bryan.jpeg"
+  },
 ];
 
 export default function AboutPage() {
