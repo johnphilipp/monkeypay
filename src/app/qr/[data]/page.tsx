@@ -57,6 +57,7 @@ export async function generateMetadata({
   }.`;
   const description = "MonkeyPay.";
   const url = `https://monkeypay.ch/qr/${encodedData}`;
+  const ogImageUrl = `https://monkeypay.ch/api/og/qr/${encodedData}`;
 
   return {
     title: title,
@@ -66,11 +67,20 @@ export async function generateMetadata({
       description: description,
       url: url,
       type: "website",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `QR code for ${data.creditor.name}`,
+        },
+      ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: title,
       description: description,
+      images: [ogImageUrl],
     },
   };
 }
