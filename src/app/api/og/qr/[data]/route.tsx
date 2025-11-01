@@ -139,17 +139,16 @@ export async function GET(request: Request, context: RouteContext) {
             >
               {data.creditor.name}
             </div>
-            {data.amount && (
-              <div
-                style={{
-                  fontSize: "36px",
-                  fontWeight: 700,
-                  color: "#059669",
-                }}
-              >
-                CHF {data.amount.toFixed(2)}
-              </div>
-            )}
+            <div
+              style={{
+                display: data.amount ? "flex" : "none",
+                fontSize: "36px",
+                fontWeight: 700,
+                color: "#059669",
+              }}
+            >
+              CHF {data.amount ? data.amount.toFixed(2) : "0.00"}
+            </div>
             <div style={{ fontSize: "24px", color: "#6b7280" }}>
               Scan to pay with your banking app
             </div>
