@@ -21,7 +21,7 @@ const TEAM = [
   },
   {
       name: "Bryan",
-      linkedin: "https://www.linkedin.com/btr-dev",
+      linkedin: "https://www.linkedin.com/in/btr-dev",
       image: "/bryan.jpg"
   },
 ];
